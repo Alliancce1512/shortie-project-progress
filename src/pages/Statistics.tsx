@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { ArrowLeft } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 // Mock data for demonstration - replace with actual API calls
 const mockVisitsData = [
@@ -35,7 +36,7 @@ const mockIPData = [
 const chartConfig = {
   visits: {
     label: 'Visits',
-    color: '#00C896',
+    color: '#5ce500',
   },
 };
 
@@ -68,6 +69,7 @@ const Statistics = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <ThemeToggle />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="space-y-6 animate-fade-in">
           {/* Header */}
@@ -105,10 +107,10 @@ const Statistics = () => {
                     <Line
                       type="monotone"
                       dataKey="visits"
-                      stroke="#00C896"
+                      stroke="#5ce500"
                       strokeWidth={3}
-                      dot={{ fill: '#00C896', strokeWidth: 2, r: 4 }}
-                      activeDot={{ r: 6, stroke: '#00C896', strokeWidth: 2 }}
+                      dot={{ fill: '#5ce500', strokeWidth: 2, r: 4 }}
+                      activeDot={{ r: 6, stroke: '#5ce500', strokeWidth: 2 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -171,7 +173,7 @@ const Statistics = () => {
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar
                       dataKey="visits"
-                      fill="#00C896"
+                      fill="#5ce500"
                       radius={[0, 4, 4, 0]}
                     />
                   </BarChart>
