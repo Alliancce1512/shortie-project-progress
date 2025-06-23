@@ -31,7 +31,7 @@ const URLShortener = () => {
     setError('');
     
     try {
-      const response = await fetch('https://n8n.presiyangeorgiev.eu/webhook/shortie/shorten-url', {
+      const response = await fetch('https://n8n.presiyangeorgiev.eu/webhook-test/shortie/shorten-url', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
