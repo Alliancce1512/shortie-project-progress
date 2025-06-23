@@ -17,6 +17,12 @@ jobs:
           npm ci
           npm run build
 
+      - name: Debug SSH Key Fingerprint
+        run: |
+          echo "${{ secrets.VPS_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+          ssh-keygen -lf key.pem
+
       - name: Upload to VPS
         uses: appleboy/scp-action@v0.1.1
         with:
