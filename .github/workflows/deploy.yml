@@ -44,3 +44,13 @@ jobs:
           script: |
             mkdir -p /var/www/shortie
             tar -xzf /tmp/deploy-shortie/shortie.tar.gz -C /var/www/shortie --strip-components=1
+
+      - name: Cleanup temp folder
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            rm -rf /tmp/deploy-shortie
+
