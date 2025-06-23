@@ -31,7 +31,7 @@ const URLShortener = () => {
     setError('');
     
     try {
-      const response = await fetch('/api/shorten', {
+      const response = await fetch('https://n8n.presiyangeorgiev.eu/webhook/shortie/shorten-url', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +62,6 @@ const URLShortener = () => {
             className: "bg-accent text-white border-accent",
           });
         } else {
-          setError("Something went wrong while shortening the URL.");
           toast({
             title: "Error",
             description: "Something went wrong while shortening the URL.",
@@ -70,7 +69,6 @@ const URLShortener = () => {
           });
         }
       } else {
-        setError("Something went wrong while shortening the URL.");
         toast({
           title: "Error",
           description: "Something went wrong while shortening the URL.",
