@@ -41,7 +41,7 @@ const URLShortener = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Network response was not okay');
       }
 
       const data = await response.json();
