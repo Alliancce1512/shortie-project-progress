@@ -12,17 +12,8 @@ const URLShortener = () => {
   const [statsUrl, setStatsUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [totalLinks, setTotalLinks] = useState(1247); // Mock data
+  const [error, setError] = useState('');
   const { toast } = useToast();
-
-  const generateShortUrl = () => {
-    // Generate a random short code
-    const shortCode = Math.random().toString(36).substring(2, 8);
-    return `https://shortie.ly/${shortCode}`;
-  };
-
-  const generateStatsUrl = (shortCode: string) => {
-    return `https://shortie.ly/stats/${shortCode}`;
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,24 +28,66 @@ const URLShortener = () => {
     }
 
     setIsLoading(true);
+    setError('');
     
-    // Simulate API call
-    setTimeout(() => {
-      const shortUrl = generateShortUrl();
-      const shortCode = shortUrl.split('/').pop() || '';
-      const stats = generateStatsUrl(shortCode);
-      
-      setShortenedUrl(shortUrl);
-      setStatsUrl(stats);
-      setTotalLinks(prev => prev + 1);
-      setIsLoading(false);
-      
-      toast({
-        title: "URL Shortened Successfully!",
-        description: "Your shortened URL is ready to use.",
-        className: "bg-accent text-white border-accent",
+    try {
+      const response = await fetch('/api/shorten', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          longUrl: longUrl
+        }),
       });
-    }, 1000);
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      
+      // Check if response is an array and has the expected structure
+      if (Array.isArray(data) && data.length > 0) {
+        const result = data[0];
+        
+        if (result.status === 0) {
+          setShortenedUrl(result.shortUrl);
+          setStatsUrl(result.secretUrl);
+          setTotalLinks(prev => prev + 1);
+          
+          toast({
+            title: "URL Shortened Successfully!",
+            description: "Your shortened URL is ready to use.",
+            className: "bg-accent text-white border-accent",
+          });
+        } else {
+          setError("Something went wrong while shortening the URL.");
+          toast({
+            title: "Error",
+            description: "Something went wrong while shortening the URL.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        setError("Something went wrong while shortening the URL.");
+        toast({
+          title: "Error",
+          description: "Something went wrong while shortening the URL.",
+          variant: "destructive",
+        });
+      }
+    } catch (err) {
+      console.error('Error shortening URL:', err);
+      setError("Something went wrong while shortening the URL.");
+      toast({
+        title: "Error",
+        description: "Something went wrong while shortening the URL.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const copyToClipboard = (text: string) => {
@@ -70,6 +103,7 @@ const URLShortener = () => {
     setShortenedUrl('');
     setStatsUrl('');
     setLongUrl('');
+    setError('');
   };
 
   return (
@@ -88,6 +122,12 @@ const URLShortener = () => {
         </CardHeader>
         
         <CardContent className="space-y-4">
+          {error && (
+            <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-xl text-sm">
+              {error}
+            </div>
+          )}
+          
           {!shortenedUrl ? (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
