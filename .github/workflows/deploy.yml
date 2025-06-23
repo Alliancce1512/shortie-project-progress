@@ -9,25 +9,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install deps & build
+      - name: Install & Build
         run: |
           npm ci
           npm run build
+          tar -czf shortie.tar.gz dist/
 
-      - name: Debug SSH Key Fingerprint
-        run: |
-          echo "${{ secrets.VPS_SSH_KEY }}" > key.pem
-          chmod 600 key.pem
-          ssh-keygen -lf key.pem
-
-      - name: Upload to VPS
-        uses: appleboy/scp-action@v0.1.1
+      - name: Upload via SSH
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          source: "dist/*"
-          target: "/var/www/shortie"
+          script: |
+            mkdir -p /tmp/deploy-shortie
+            exit 0
+
+      - name: Upload TAR manually
+        run: |
+          echo "${{ secrets.VPS_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+          scp -i key.pem shortie.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/tmp/deploy-shortie/
+
+      - name: Extract on server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            mkdir -p /var/www/shortie
+            tar -xzf /tmp/deploy-shortie/shortie.tar.gz -C /var/www/shortie --strip-components=1
