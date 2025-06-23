@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,27 +46,17 @@ const URLShortener = () => {
 
       const data = await response.json();
       
-      // Check if response is an array and has the expected structure
-      if (Array.isArray(data) && data.length > 0) {
-        const result = data[0];
+      // The API returns a single object, not an array
+      if (data && data.status === 0) {
+        setShortenedUrl(data.shortUrl);
+        setStatsUrl(data.secretUrl);
+        setTotalLinks(prev => prev + 1);
         
-        if (result.status === 0) {
-          setShortenedUrl(result.shortUrl);
-          setStatsUrl(result.secretUrl);
-          setTotalLinks(prev => prev + 1);
-          
-          toast({
-            title: "URL Shortened Successfully!",
-            description: "Your shortened URL is ready to use.",
-            className: "bg-accent text-white border-accent",
-          });
-        } else {
-          toast({
-            title: "Error",
-            description: "Something went wrong while shortening the URL.",
-            variant: "destructive",
-          });
-        }
+        toast({
+          title: "URL Shortened Successfully!",
+          description: "Your shortened URL is ready to use.",
+          className: "bg-accent text-white border-accent",
+        });
       } else {
         toast({
           title: "Error",
