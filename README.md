@@ -56,4 +56,3 @@ You can try to generate short links by yourself or use these pre-generated links
 ## 📬 Contact
 
 Made by [Presiyan Georgiev](https://presiyangeorgiev.eu)
-Email: preskoto1403@gmail.com
