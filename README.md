@@ -55,4 +55,4 @@ You can try to generate short links by yourself or use these pre-generated links
 
 ## 📬 Contact
 
-Made by [Presiyan Georgiev](https://presiyangeorgiev.eu)
+Made by [Presiyan Georgiev](https://www.linkedin.com/in/presiyan-georgiev/)
