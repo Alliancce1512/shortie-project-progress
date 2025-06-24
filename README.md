@@ -8,6 +8,8 @@ This is a web application built as part of a technical interview task for Progre
 
 You can try to generate short links by yourself or use these pre-generated links:
 
+- 🔹 [Website](https://shortie.presiyangeorgiev.eu)
+
 - 🔸 [Short URL](https://shortie.presiyangeorgiev.eu/r/uqzsre)
 - 🔹 [Statistics URL](https://shortie.presiyangeorgiev.eu/s/1ccd40a7f6be5c1da48d)
 
