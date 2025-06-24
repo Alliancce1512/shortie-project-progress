@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { ArrowLeft } from 'lucide-react';
-import ThemeToggle from '@/components/ThemeToggle';
+import TopNav from '@/components/TopNav';
 
 const chartConfig = {
   visits: {
@@ -53,7 +53,7 @@ const Statistics = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
-        <ThemeToggle />
+        <TopNav />
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-accent border-t-transparent mx-auto mb-4"></div>
@@ -67,7 +67,7 @@ const Statistics = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-background">
-        <ThemeToggle />
+        <TopNav />
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <div className="text-destructive mb-4">Failed to load statistics</div>
@@ -83,7 +83,7 @@ const Statistics = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <ThemeToggle />
+      <TopNav />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="space-y-6 animate-fade-in">
           {/* Header */}

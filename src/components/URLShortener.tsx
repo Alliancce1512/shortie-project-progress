@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,6 +13,28 @@ const URLShortener = () => {
   const [totalLinks, setTotalLinks] = useState(1247); // Mock data
   const [error, setError] = useState('');
   const { toast } = useToast();
+
+  // Load persisted data on component mount
+  useEffect(() => {
+    const savedShortenedUrl = localStorage.getItem('shortie_shortened_url');
+    const savedStatsUrl = localStorage.getItem('shortie_stats_url');
+    const savedLongUrl = localStorage.getItem('shortie_long_url');
+    
+    if (savedShortenedUrl && savedStatsUrl) {
+      setShortenedUrl(savedShortenedUrl);
+      setStatsUrl(savedStatsUrl);
+      setLongUrl(savedLongUrl || '');
+    }
+  }, []);
+
+  // Save URLs to localStorage whenever they change
+  useEffect(() => {
+    if (shortenedUrl && statsUrl) {
+      localStorage.setItem('shortie_shortened_url', shortenedUrl);
+      localStorage.setItem('shortie_stats_url', statsUrl);
+      localStorage.setItem('shortie_long_url', longUrl);
+    }
+  }, [shortenedUrl, statsUrl, longUrl]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,6 +113,11 @@ const URLShortener = () => {
     setStatsUrl('');
     setLongUrl('');
     setError('');
+    
+    // Clear localStorage
+    localStorage.removeItem('shortie_shortened_url');
+    localStorage.removeItem('shortie_stats_url');
+    localStorage.removeItem('shortie_long_url');
   };
 
   return (
