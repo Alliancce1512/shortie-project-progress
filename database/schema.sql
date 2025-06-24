@@ -1,0 +1,21 @@
+CREATE TABLE urls (
+  id SERIAL PRIMARY KEY,
+  long_url TEXT NOT NULL,
+  short_code VARCHAR(16) NOT NULL UNIQUE,
+  secret_code VARCHAR(64) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE visits (
+  id SERIAL PRIMARY KEY,
+  url_id INTEGER REFERENCES urls(id) ON DELETE CASCADE,
+  ip_address TEXT NOT NULL,
+  visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE daily_uniques (
+  url_id INTEGER REFERENCES urls(id) ON DELETE CASCADE,
+  ip_address TEXT NOT NULL,
+  date DATE NOT NULL,
+  PRIMARY KEY (url_id, ip_address, date)
+);
