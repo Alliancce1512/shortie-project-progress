@@ -88,6 +88,90 @@ psql -U <your_db_user> -d <your_db_name> -f schema.sql
 
 ---
 
+## ▶️ How to Run and Use
+
+To run and use the project locally or on your own VPS:
+
+### 1. **Clone the repository**
+```bash
+git clone https://github.com/Alliancce1512/shortie-project-progress.git
+cd shortie-project-progress
+```
+
+### 2. **Install dependencies**
+```bash
+npm install
+```
+
+### 3. **Run the development server**
+```bash
+npm run dev
+```
+
+The app will be available at [http://localhost:5173](http://localhost:5173).
+
+### 4. **Production Build**
+```bash
+npm run build
+```
+
+Then deploy the `dist/` folder to your server (e.g. `/var/www/shortie`)  
+CI/CD is already preconfigured via **GitHub Actions + SSH**.
+
+---
+
+## 🔧 Backend (n8n) Workflows (Reference)
+
+The backend logic is implemented via **n8n**, a visual automation tool that acts as a logic layer for link generation, redirection, tracking, and stats. The production instance is self-hosted and not publicly available for security reasons.
+
+> ℹ️ Even though the backend isn't exposed, the system is fully testable via live demo links and well-documented endpoints.
+
+### ✅ Active Workflows
+
+| Workflow               | Method | Path                                       | Purpose                                     |
+|------------------------|--------|--------------------------------------------|---------------------------------------------|
+| Create Short URL       | POST   | `/shortie/shorten-url`                     | Receives long URL, returns short & stat URLs |
+| Redirect to Long URL   | GET    | `/shortie/redirect/:shortCode`             | Logs IP, adds visit, and redirects           |
+| Secret Page Redirect   | GET    | `/shortie/stats/:secretCode`               | Redirects to frontend stats page             |
+| Return Stats JSON      | GET    | `/shortie/stats/:secretUrl`                | Returns top IPs + daily visits in JSON       |
+
+### 📥 Request / Response (Create URL)
+
+**POST** `/shortie/shorten-url`
+```json
+{
+  "longUrl": "https://example.com"
+}
+```
+
+**Response:**
+```json
+{
+  "shortUrl": "https://shortie.presiyangeorgiev.eu/r/abc123",
+  "secretUrl": "https://shortie.presiyangeorgiev.eu/s/1ccd40a7f6be5c1da48d"
+}
+```
+
+### 📊 Response (Stats JSON)
+
+**GET** `/shortie/stats/:secretUrl`
+```json
+[
+  {
+    "dailyVisits": [
+      { "date": "2025-06-23", "count": "2" },
+      { "date": "2025-06-22", "count": "2" }
+    ],
+    "topIps": [
+      { "ip": "62.73.73.198", "count": "2" },
+      { "ip": "62.73.73.197", "count": "1" }
+    ]
+  }
+]
+```
+
+---
+
 ## 🔐 Code Generation & Security
 
 ### Short Code (`/r/<shortCode>`)
@@ -120,6 +204,25 @@ psql -U <your_db_user> -d <your_db_name> -f schema.sql
   - Total visits
   - Daily unique visits (by IP + day)
   - Top IPs accessing each link
+
+---
+
+## 🚧 Known Limitations
+
+- The backend (n8n) is self-hosted and not accessible for direct public usage
+- No authentication or rate limiting implemented
+- No UI for managing previously created links beyond session cache
+
+---
+
+## 🔮 Future Improvements
+
+- Rebuild backend in Node.js/Express or NestJS for full-stack control
+- Add pagination and filtering for large-scale analytics
+- Save short + secret links in browser localStorage or user profiles
+- Add automated unit and integration tests
+- Add multi-language support
+- Add admin panel to moderate or manage all shortened URLs
 
 ---
 
