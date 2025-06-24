@@ -72,7 +72,7 @@ You can try to generate short links by yourself or use these pre-generated links
 |--------------|---------|----------------------------------|
 | url_id       | int     | Foreign key to urls.id           |
 | ip_address   | text    | IP address of visitor            |
-| created_at   | date    | When the visit occurred          |
+| visited_at   | date    | When the visit occurred          |
 
 ### daily_uniques
 | Column       | Type    | Description                      |
