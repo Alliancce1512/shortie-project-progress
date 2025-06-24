@@ -1,73 +1,57 @@
-# Welcome to your Lovable project
+# 🔗 Shortie — URL Shortener App
 
-## Project info
+This is a web application built as part of a technical interview task for Progress. It allows users to shorten long URLs, track their usage, and view access statistics through a secret page.
 
-**URL**: https://lovable.dev/projects/593ecd92-06b0-4206-a265-068321fb6463
+---
 
-## How can I edit this code?
+## ✨ Demo
 
-There are several ways of editing your application.
+You can try to generate short links by yourself or use these pre-generated links:
 
-**Use Lovable**
+- 🔸 [Short URL](https://shortie.presiyangeorgiev.eu/r/uqzsre)
+- 🔹 [Statistics URL](https://shortie.presiyangeorgiev.eu/s/1ccd40a7f6be5c1da48d)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/593ecd92-06b0-4206-a265-068321fb6463) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🧰 Tech Stack
 
-**Use your preferred IDE**
+| Layer        | Tech Used                                        |
+|--------------|--------------------------------------------------|
+| Frontend     | [Loveable.dev](https://www.loveable.dev/)        |
+| Backend      | [n8n](https://n8n.io/) workflows via webhooks    |
+| Database     | PostgreSQL                                       |
+| Hosting      | Self-hosted VPS (Ubuntu) with NGINX + CI/CD      |
+| Deployment   | GitHub Actions + SSH Deploy                      |
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🚀 Features
 
-Follow these steps:
+- ✅ URL shortening with format validation and length limits
+- ✅ Secret statistics URL generation (hard to guess)
+- ✅ Visit logging with IP address and `X-Forwarded-For` support
+- ✅ Unique visits per day tracking
+- ✅ Top 10 IPs by total opens
+- ✅ JSON API + frontend visualization
+- ✅ Fully responsive (mobile + desktop)
+- ✅ Dark/light mode support with persistent theme
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🧠 Architecture Overview
 
-# Step 3: Install the necessary dependencies.
-npm i
+- Users submit a long URL via the frontend
+- Backend (n8n) generates:
+  - A short URL (for redirect)
+  - A secret URL (for viewing stats)
+- Generated short and secret codes are stored in the `urls` table
+- Visits are logged in `visits` table
+- Unique IPs per day are stored in `daily_uniques`
+- Frontend dynamically loads and visualizes stats
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+## 📬 Contact
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/593ecd92-06b0-4206-a265-068321fb6463) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Made by [Presiyan Georgiev](https://presiyangeorgiev.eu)
+Email: preskoto1403@gmail.com
