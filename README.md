@@ -78,6 +78,16 @@ You can try to generate short links by yourself or use these pre-generated links
 
 ---
 
+## Database Setup
+
+To create the necessary database tables, run the following SQL file:
+
+```bash
+psql -U <your_db_user> -d <your_db_name> -f schema.sql
+```
+
+---
+
 ## 🔐 Code Generation & Security
 
 ### Short Code (`/r/<shortCode>`)
