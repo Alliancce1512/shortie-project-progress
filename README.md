@@ -8,9 +8,9 @@ Shortie is a full-stack URL shortener built with a modern frontend (via Loveable
 
 You can try to generate short links by yourself or use these pre-generated links:
 
-- 🔹 [Live Website](https://shortie.presiyangeorgiev.eu)
-- 🔸 [Short URL](https://shortie.presiyangeorgiev.eu/r/uqzsre)
-- ♦️ [Statistics URL](https://shortie.presiyangeorgiev.eu/s/1ccd40a7f6be5c1da48d)
+- [Live Website](https://shortie.presiyangeorgiev.eu)
+- [Short URL](https://shortie.presiyangeorgiev.eu/r/uqzsre)
+- [Statistics URL](https://shortie.presiyangeorgiev.eu/s/1ccd40a7f6be5c1da48d)
 
 ---
 
@@ -28,14 +28,13 @@ You can try to generate short links by yourself or use these pre-generated links
 
 ## 🚀 Features
 
-- ✅ URL shortening with format validation and length limits
-- ✅ Secret statistics URL generation (hard to guess)
-- ✅ Visit logging with IP address and `X-Forwarded-For` support
-- ✅ Unique visits per day tracking
-- ✅ Top 10 IPs by total opens
-- ✅ JSON API + frontend visualization
-- ✅ Fully responsive (mobile + desktop)
-- ✅ Dark/light mode support with persistent theme
+- URL shortening with format validation and length limits
+- Secret statistics URL generation (hard to guess)
+- Visit logging with IP address and `X-Forwarded-For` support
+- Unique visits per day tracking
+- Top 10 IPs by total opens
+- Dark/light mode support with persistent theme
+- Fully responsive (mobile + desktop)
 
 ---
 
