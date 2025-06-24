@@ -52,21 +52,30 @@ const Statistics = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-foreground">Loading statistics...</div>
+      <div className="min-h-screen bg-background">
+        <ThemeToggle />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-2 border-accent border-t-transparent mx-auto mb-4"></div>
+            <div className="text-foreground">Loading statistics...</div>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-destructive mb-4">Failed to load statistics</div>
-          <Button onClick={handleBackToHome} variant="outline">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Home
-          </Button>
+      <div className="min-h-screen bg-background">
+        <ThemeToggle />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="text-destructive mb-4">Failed to load statistics</div>
+            <Button onClick={handleBackToHome} variant="outline">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Home
+            </Button>
+          </div>
         </div>
       </div>
     );

@@ -27,7 +27,7 @@ const ThemeToggle = () => {
       variant="outline"
       size="sm"
       onClick={toggleTheme}
-      className="fixed top-4 right-4 z-50 hover:bg-accent hover:text-accent-foreground transition-colors"
+      className="hover:bg-accent hover:text-accent-foreground transition-colors"
     >
       {theme === 'light' ? (
         <Moon className="h-4 w-4" />

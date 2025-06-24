@@ -1,13 +1,13 @@
 
 import URLShortener from '@/components/URLShortener';
-import ThemeToggle from '@/components/ThemeToggle';
+import TopNav from '@/components/TopNav';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <ThemeToggle />
+      <TopNav />
       <div className="container mx-auto px-4 py-8 md:py-16">
-        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-12rem)]">
           <div className="text-center mb-8 animate-fade-in">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               Welcome to <span className="text-accent">Shortie</span>
