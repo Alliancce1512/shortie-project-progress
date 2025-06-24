@@ -78,7 +78,7 @@ You can try to generate short links by yourself or use these pre-generated links
 
 ---
 
-## Database Setup
+## 🛠️ Database Setup
 
 To create the necessary database tables, run the following SQL file:
 
