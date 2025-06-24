@@ -20,11 +20,13 @@ const Statistics = () => {
   const { secretUrl } = useParams();
   const navigate = useNavigate();
 
+  console.log(secretUrl);
+
   // Fetch statistics from the API
   const { data, isLoading, error } = useQuery({
     queryKey: ['stats', secretUrl],
     queryFn: async () => {
-      const response = await fetch(`https://n8n.presiyangeorgiev.eu/webhook-test/7a8a7b20-adfb-4c31-acaa-bbafb19a6215/shortie/stats/${secretUrl}`);
+      const response = await fetch(`https://n8n.presiyangeorgiev.eu/webhook/7a8a7b20-adfb-4c31-acaa-bbafb19a6215/shortie/stats/${secretUrl}`);
       if (!response.ok) {
         throw new Error('Failed to fetch statistics');
       }
