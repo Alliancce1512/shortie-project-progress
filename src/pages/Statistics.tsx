@@ -9,30 +9,6 @@ import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar } fro
 import { ArrowLeft } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 
-// Mock data for demonstration - replace with actual API calls
-const mockVisitsData = [
-  { date: '2024-06-15', visits: 12 },
-  { date: '2024-06-16', visits: 19 },
-  { date: '2024-06-17', visits: 8 },
-  { date: '2024-06-18', visits: 25 },
-  { date: '2024-06-19', visits: 16 },
-  { date: '2024-06-20', visits: 32 },
-  { date: '2024-06-21', visits: 28 },
-];
-
-const mockIPData = [
-  { ip: '192.168.1.1', visits: 45 },
-  { ip: '10.0.0.1', visits: 32 },
-  { ip: '172.16.0.1', visits: 28 },
-  { ip: '203.0.113.1', visits: 24 },
-  { ip: '198.51.100.1', visits: 19 },
-  { ip: '192.0.2.1', visits: 16 },
-  { ip: '203.0.113.2', visits: 14 },
-  { ip: '198.51.100.2', visits: 12 },
-  { ip: '192.0.2.2', visits: 9 },
-  { ip: '203.0.113.3', visits: 7 },
-];
-
 const chartConfig = {
   visits: {
     label: 'Visits',
@@ -44,25 +20,52 @@ const Statistics = () => {
   const { secretUrl } = useParams();
   const navigate = useNavigate();
 
-  // Mock API call - replace with actual endpoint
-  const { data: visitsData, isLoading: visitsLoading } = useQuery({
-    queryKey: ['visits', secretUrl],
-    queryFn: () => Promise.resolve(mockVisitsData),
-  });
-
-  const { data: ipData, isLoading: ipLoading } = useQuery({
-    queryKey: ['ips', secretUrl],
-    queryFn: () => Promise.resolve(mockIPData),
+  // Fetch statistics from the API
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['stats', secretUrl],
+    queryFn: async () => {
+      const response = await fetch(`https://n8n.presiyangeorgiev.eu/webhook/7a8a7b20-adfb-4c31-acaa-bbafb19a6215/shortie/stats/${secretUrl}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch statistics');
+      }
+      return response.json();
+    },
+    enabled: !!secretUrl, // Only fetch if secretUrl exists
   });
 
   const handleBackToHome = () => {
     navigate('/');
   };
 
-  if (visitsLoading || ipLoading) {
+  // Transform API data for charts
+  const visitsData = data?.dailyVisits?.map((item: any) => ({
+    date: item.date,
+    visits: parseInt(item.count, 10),
+  })) || [];
+
+  const ipData = data?.topIps?.map((item: any) => ({
+    ip: item.ip,
+    visits: parseInt(item.count, 10),
+  })) || [];
+
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-foreground">Loading statistics...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-destructive mb-4">Failed to load statistics</div>
+          <Button onClick={handleBackToHome} variant="outline">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Home
+          </Button>
+        </div>
       </div>
     );
   }
@@ -90,31 +93,37 @@ const Statistics = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={visitsData}>
-                    <XAxis 
-                      dataKey="date" 
-                      stroke="#6B7280"
-                      fontSize={12}
-                      tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                    />
-                    <YAxis 
-                      stroke="#6B7280"
-                      fontSize={12}
-                    />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Line
-                      type="monotone"
-                      dataKey="visits"
-                      stroke="#5ce500"
-                      strokeWidth={3}
-                      dot={{ fill: '#5ce500', strokeWidth: 2, r: 4 }}
-                      activeDot={{ r: 6, stroke: '#5ce500', strokeWidth: 2 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </ChartContainer>
+              {visitsData.length > 0 ? (
+                <ChartContainer config={chartConfig} className="h-[300px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={visitsData}>
+                      <XAxis 
+                        dataKey="date" 
+                        stroke="#6B7280"
+                        fontSize={12}
+                        tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      />
+                      <YAxis 
+                        stroke="#6B7280"
+                        fontSize={12}
+                      />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Line
+                        type="monotone"
+                        dataKey="visits"
+                        stroke="#5ce500"
+                        strokeWidth={3}
+                        dot={{ fill: '#5ce500', strokeWidth: 2, r: 4 }}
+                        activeDot={{ r: 6, stroke: '#5ce500', strokeWidth: 2 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              ) : (
+                <div className="text-center text-muted-foreground py-8">
+                  No visit data available
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -126,24 +135,30 @@ const Statistics = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-muted-foreground">IP Address</TableHead>
-                    <TableHead className="text-muted-foreground text-right">Number of Visits</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {ipData?.map((item, index) => (
-                    <TableRow key={item.ip} className="hover:bg-muted/50 transition-colors">
-                      <TableCell className="font-mono text-foreground">{item.ip}</TableCell>
-                      <TableCell className="text-right text-foreground font-semibold">
-                        {item.visits}
-                      </TableCell>
+              {ipData.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-muted-foreground">IP Address</TableHead>
+                      <TableHead className="text-muted-foreground text-right">Number of Visits</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {ipData.slice(0, 10).map((item, index) => (
+                      <TableRow key={item.ip} className="hover:bg-muted/50 transition-colors">
+                        <TableCell className="font-mono text-foreground">{item.ip}</TableCell>
+                        <TableCell className="text-right text-foreground font-semibold">
+                          {item.visits}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <div className="text-center text-muted-foreground py-8">
+                  No IP data available
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -155,30 +170,36 @@ const Statistics = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={ipData?.slice(0, 5)} layout="horizontal">
-                    <XAxis 
-                      type="number"
-                      stroke="#6B7280"
-                      fontSize={12}
-                    />
-                    <YAxis 
-                      type="category"
-                      dataKey="ip"
-                      stroke="#6B7280"
-                      fontSize={12}
-                      width={100}
-                    />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar
-                      dataKey="visits"
-                      fill="#5ce500"
-                      radius={[0, 4, 4, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
+              {ipData.length > 0 ? (
+                <ChartContainer config={chartConfig} className="h-[300px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={ipData.slice(0, 5)} layout="horizontal">
+                      <XAxis 
+                        type="number"
+                        stroke="#6B7280"
+                        fontSize={12}
+                      />
+                      <YAxis 
+                        type="category"
+                        dataKey="ip"
+                        stroke="#6B7280"
+                        fontSize={12}
+                        width={100}
+                      />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar
+                        dataKey="visits"
+                        fill="#5ce500"
+                        radius={[0, 4, 4, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              ) : (
+                <div className="text-center text-muted-foreground py-8">
+                  No data available for visualization
+                </div>
+              )}
             </CardContent>
           </Card>
 
